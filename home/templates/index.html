@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Projetos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* CSS Reset e Estilos básicos */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #ffffff; /* Cor de fundo alterada para branco */
+            color: #333; /* Cor do texto alterada para um tom escuro */
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+            color: #0072ff; /* Cor do título em azul */
+        }
+        .project-container {
+            max-width: 900px;
+            width: 100%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 30px;
+        }
+        .project {
+            position: relative;
+            width: 600px;
+            height: auto;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: rgba(0, 114, 255, 0.1); /* Fundo dos projetos em azul claro */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .button-container {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .button-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-top: auto;
+            padding: 20px;
+        }
+        button {
+            padding: 10px 20px; 
+            background-color: #0072ff; /* Cor dos botões em azul */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 14px; 
+            margin: 0 10px;
+        }
+        button:hover {
+            background-color: #0056b3; /* Cor do botão ao passar o mouse */
+        }
+        .logout-link {
+            position: absolute; 
+            top: 20px;
+            right: 20px;
+            display: block;
+            padding: 10px 20px; 
+            background-color: #0072ff; 
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .logout-link:hover {
+            background-color: #0056b3; 
+        }
+        .task-list {
+            margin-top: 15px; 
+            border-top: 1px solid rgba(0, 0, 0, 0.1); 
+            padding-top: 10px;
+        }
+        .task {
+            background-color: rgba(0, 114, 255, 0.1); /* Fundo das tarefas em azul claro */
+            padding: 10px;
+            border-radius: 4px;
+            margin: 5px 0;
+        }
+        .task-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>GERENCIAMENTO DE PROJETOS</h1>
+
+<div class="project-container" id="projectContainer">
+    <!-- Projetos serão adicionados aqui via JavaScript -->
+</div>
+
+<div class="button-wrapper">
+    <button onclick="location.href='cadastrar_projeto.html'"><i class="fas fa-plus"></i> Cadastrar Projeto</button>
+    <button onclick="location.href='listar_projeto.html'"><i class="fas fa-list"></i> Listar Projetos</button> 
+</div>
+
+<a href="login.html" class="logout-link">Sair do Sistema</a>
+
+<script>
+    // Função para carregar projetos armazenados no localStorage
+    function loadProjects() {
+        const projects = JSON.parse(localStorage.getItem('projects')) || [];
+        const projectContainer = document.getElementById('projectContainer');
+        projectContainer.innerHTML = ''; // Limpa o container
+
+        projects.forEach((project, index) => {
+            const projectDiv = document.createElement('div');
+            projectDiv.className = 'project';
+
+            const projectTitle = document.createElement('h2');
+            projectTitle.textContent = project.nome;
+            projectDiv.appendChild(projectTitle);
+
+            // Adiciona as informações gerais do projeto
+            projectDiv.innerHTML += `
+                <p><strong>Descrição:</strong> ${project.descricao}</p>
+                <p><strong>Data de Início:</strong> ${project.data_inicio}</p>
+                <p><strong>Data de Término:</strong> ${project.data_fim}</p>
+                <p><strong>Status:</strong> ${project.status}</p>
+            `;
+
+            // Botão de cadastrar tarefa
+            const buttonTask = document.createElement('button');
+            buttonTask.textContent = 'Cadastrar Tarefa';
+            buttonTask.onclick = () => {
+                localStorage.setItem('currentProjectIndex', index);
+                location.href = 'cadastrar_tarefa.html'; // Redireciona para a página de cadastro de tarefa
+            };
+            projectDiv.appendChild(buttonTask);
+
+            const taskList = document.createElement('div');
+            taskList.className = 'task-list';
+
+            if (project.tarefas && project.tarefas.length > 0) {
+                project.tarefas.forEach((task, taskIndex) => {
+                    const taskDiv = document.createElement('div');
+                    taskDiv.className = 'task';
+                    taskDiv.innerHTML = `
+                        <p><strong>Nome da Tarefa:</strong> ${task.nome}</p>
+                        <p><strong>Nome do Responsável:</strong> ${task.responsavel}</p>
+                        <p><strong>Data de Entrega:</strong> ${task.data_entrega}</p>
+                        <p><strong>Descrição:</strong> ${task.descricao}</p>
+                    `;
+                    
+                    // Adiciona os botões de editar e excluir tarefa
+                    const taskButtons = document.createElement('div');
+                    taskButtons.className = 'task-buttons';
+                    
+                    const editButton = document.createElement('button');
+                    editButton.textContent = 'Editar Tarefa';
+                    editButton.onclick = () => {
+                        localStorage.setItem('currentProjectIndex', index);
+                        localStorage.setItem('currentTaskIndex', taskIndex);
+                        location.href = 'editar_tarefa.html'; // Redireciona para a página de edição de tarefa
+                    };
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Excluir Tarefa';
+                    deleteButton.onclick = () => {
+                        if (confirm('Você tem certeza que deseja excluir esta tarefa?')) {
+                            // Remove a tarefa do projeto
+                            projects[index].tarefas.splice(taskIndex, 1);
+                            localStorage.setItem('projects', JSON.stringify(projects));
+                            loadProjects(); // Atualiza a lista de projetos
+                        }
+                    };
+
+                    taskButtons.appendChild(editButton);
+                    taskButtons.appendChild(deleteButton);
+                    taskDiv.appendChild(taskButtons);
+                    taskList.appendChild(taskDiv);
+                });
+            } else {
+                const noTasks = document.createElement('div');
+                noTasks.textContent = 'Nenhuma tarefa cadastrada.';
+                taskList.appendChild(noTasks);
+            }
+
+            projectDiv.appendChild(taskList);
+            projectContainer.appendChild(projectDiv);
+        });
+    }
+
+    // Carrega os projetos ao abrir a página
+    window.onload = loadProjects;
+</script>
+
+</body>
+</html>

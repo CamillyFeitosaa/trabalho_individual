@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Projeto</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #fff; /* Fundo branco */
+            color: #333; /* Cor do texto em cinza escuro */
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: #333; /* Cor do texto em cinza escuro */
+        }
+        .form-container {
+            background: rgba(255, 255, 255, 0.9); /* Fundo branco com leve transparência */
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 500px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333; /* Cor do texto em cinza escuro */
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc; /* Borda cinza */
+            border-radius: 4px;
+            color: #333; /* Cor do texto em cinza escuro */
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #0072ff; /* Tom de azul */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3; /* Tom de azul mais escuro */
+        }
+        .back-button {
+            background-color: #2bd0c5; /* Cor diferente para o botão de voltar */
+            margin-bottom: 20px; /* Espaço entre o botão de voltar e o formulário */
+        }
+    </style>
+</head>
+<body>
+
+<h1>Editar Projeto</h1>
+
+<!-- Botão de Voltar -->
+<button class="back-button" onclick="window.location.href='listar_projeto.html'">
+    <i class="fas fa-arrow-left"></i> Voltar
+</button>
+
+<div class="form-container">
+    <label for="projectName">Nome do Projeto:</label>
+    <input type="text" id="projectName" placeholder="Nome do Projeto" required>
+    
+    <label for="projectDescription">Descrição:</label>
+    <textarea id="projectDescription" rows="4" placeholder="Descrição do Projeto" required></textarea>
+    
+    <button onclick="saveProject()">Salvar Projeto</button>
+</div>
+
+<script>
+    // Função para carregar os dados do projeto a ser editado
+    function loadProject() {
+        const project = JSON.parse(localStorage.getItem('projectToEdit'));
+        const projectIndex = localStorage.getItem('editIndex');
+
+        // Verifica se o projeto existe
+        if (project) {
+            document.getElementById('projectName').value = project.nome;
+            document.getElementById('projectDescription').value = project.descricao;
+        } else {
+            alert('Projeto não encontrado.');
+            window.location.href = 'listar_projeto.html'; // Redireciona se não encontrar
+        }
+    }
+
+    // Função para salvar o projeto editado
+    function saveProject() {
+        const projectIndex = localStorage.getItem('editIndex');
+        const projects = JSON.parse(localStorage.getItem('projects')) || [];
+        
+        // Atualiza o projeto com os novos valores
+        if (projects[projectIndex]) {
+            projects[projectIndex].nome = document.getElementById('projectName').value;
+            projects[projectIndex].descricao = document.getElementById('projectDescription').value;
+
+            // Salva as alterações no localStorage
+            localStorage.setItem('projects', JSON.stringify(projects)); 
+            alert('Projeto editado com sucesso!'); // Notificação de sucesso
+            window.location.href = 'listar_projeto.html'; // Redireciona de volta para a lista de projetos
+        } else {
+            alert('Erro ao salvar o projeto.');
+        }
+    }
+
+    // Chama a função para carregar os dados do projeto ao carregar a página
+    window.onload = loadProject;
+</script>
+</body>
+</html>

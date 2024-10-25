@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auth</title>
+    <title>Login - Sistema de Gerenciamento</title>
     <style>
         * {
             margin: 0;
@@ -87,23 +87,13 @@
             color: #ff6868;
             font-size: 14px;
         }
-        .login-link {
-            display: block;
-            margin-top: 15px;
-            color: #0072ff; /* Cor do link */
-            font-size: 12px;
-            text-decoration: none;
-        }
-        .login-link:hover {
-            text-decoration: underline;
-        }
     </style>
 </head>
 <body>
 
 <div class="login-container">
     <h2>Entre no Sistema</h2>
-    <form id="loginForm"> <!-- Impede o envio padrão -->
+    <form id="loginForm" onsubmit="return false;"> <!-- Impede o envio padrão -->
         <div class="form-group">
             <label for="email">E-mail</label>
             <input type="text" id="email" name="email" placeholder="Digite seu email" required>
@@ -113,10 +103,25 @@
             <input type="password" id="password" name="password" placeholder="Digite sua senha" required>
         </div>
         <button type="submit" id="submitButton">Entrar</button>
+        <a href="/forgot-password" class="forgot-password">Esqueceu a senha?</a>
         <div class="error-message" id="error-message"></div>
-        <a href="/login.html" class="login-link">Não tem uma conta? Faça seu Cadastro</a>
     </form>
 </div>
+
+<script>
+    document.getElementById('submitButton').addEventListener('click', function () {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        // Lógica de validação
+        if (email === '' || password === '') {
+            document.getElementById('error-message').textContent = 'Por favor, preencha todos os campos.';
+        } else {
+            // Redireciona para a tela principal após validação
+            window.location.href = 'tela_principal.html'; // Altere o nome do arquivo se necessário
+        }
+    });
+</script>
 
 </body>
 </html>

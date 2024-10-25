@@ -17,15 +17,15 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            color: #333; /* Texto em cinza escuro */
+            color: #333; /* Cor do texto em cinza escuro */
         }
-        .login-container {
-            background-color: rgba(255, 255, 255, 0.9); /* Fundo da caixa de login com leve transparência */
+        .register-container {
+            background-color: rgba(255, 255, 255, 0.9); /* Fundo branco com leve transparência */
             padding: 40px 30px;
             border-radius: 12px;
             box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 350px;
+            max-width: 400px;
             text-align: center;
         }
         h2 {
@@ -45,18 +45,19 @@
             color: #333; /* Cor do texto em cinza escuro */
         }
         input[type="text"],
+        input[type="email"],
         input[type="password"] {
             width: 100%;
             padding: 12px 15px;
-            border: none;
+            border: 1px solid #ccc; /* Borda cinza */
             border-radius: 8px;
-            background-color: rgba(0, 0, 0, 0.05); /* Fundo dos inputs com leve transparência */
-            color: #333; /* Texto em cinza escuro */
+            background-color: #fff; /* Fundo branco */
+            color: #333; /* Cor do texto em cinza escuro */
             font-size: 14px;
             outline: none;
         }
         input::placeholder {
-            color: rgba(0, 0, 0, 0.7); /* Cor do placeholder */
+            color: rgba(51, 51, 51, 0.7); /* Placeholder em cinza */
         }
         button {
             width: 100%;
@@ -72,21 +73,6 @@
         button:hover {
             background-color: #0056b3; /* Tom de azul mais escuro */
         }
-        .forgot-password {
-            display: block;
-            margin-top: 15px;
-            color: #0072ff; /* Cor do link de esqueci a senha */
-            font-size: 12px;
-            text-decoration: none;
-        }
-        .forgot-password:hover {
-            text-decoration: underline;
-        }
-        .error-message {
-            margin-top: 15px;
-            color: #ff6868;
-            font-size: 14px;
-        }
         .login-link {
             display: block;
             margin-top: 15px;
@@ -101,22 +87,33 @@
 </head>
 <body>
 
-<div class="login-container">
-    <h2>Entre no Sistema</h2>
-    <form id="loginForm"> <!-- Impede o envio padrão -->
+<div class="register-container">
+    <h2>Cadastro de Usuário</h2>
+    <form action="/login.html" method="GET" id="registerForm" onsubmit="return handleRegister()">
+        <div class="form-group">
+            <label for="name">Nome Completo</label>
+            <input type="text" id="name" name="name" placeholder="Digite seu nome" required>
+        </div>
         <div class="form-group">
             <label for="email">E-mail</label>
-            <input type="text" id="email" name="email" placeholder="Digite seu email" required>
+            <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
         </div>
         <div class="form-group">
             <label for="password">Senha</label>
-            <input type="password" id="password" name="password" placeholder="Digite sua senha" required>
+            <input type="password" id="password" name="password" placeholder="Crie uma senha" required>
         </div>
-        <button type="submit" id="submitButton">Entrar</button>
-        <div class="error-message" id="error-message"></div>
-        <a href="/login.html" class="login-link">Não tem uma conta? Faça seu Cadastro</a>
+        <button type="submit">Cadastrar</button>
+        <a href="/login.html" class="login-link">Já tem uma conta? Faça login</a>
     </form>
 </div>
+
+<script>
+    function handleRegister() {
+        // Aqui você pode adicionar a lógica para registrar o usuário (ex: via API)
+        alert('Usuário cadastrado com sucesso! Você será redirecionado para a página de login.');
+        return true; // Retorna true para permitir o redirecionamento
+    }
+</script>
 
 </body>
 </html>

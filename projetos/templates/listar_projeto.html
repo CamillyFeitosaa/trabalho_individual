@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listar Projetos - Gerente de Projetos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMS5Lep3n4yPp2c4yN/U51R0b1f3uI1xR+gFRk" crossorigin="anonymous">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #fff; /* Fundo branco */
+            color: #333; /* Texto em cinza escuro */
+            padding: 20px;
+            position: relative;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+            color: #333; /* Cor do texto em cinza escuro */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: rgba(255, 255, 255, 0.9); /* Fundo da tabela com leve transparência */
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        th {
+            background-color: rgba(0, 0, 0, 0.05);
+            color: #333; /* Cor do texto em cinza escuro */
+        }
+        tr:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+        .button-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #0072ff; /* Tom de azul */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3; /* Tom de azul mais escuro */
+        }
+        .logout-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: block;
+            padding: 10px 20px;
+            background-color: #2ec6e5; /* Cor do botão de logout */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .logout-link:hover {
+            background-color: #2845d7; /* Tom de vermelho mais escuro */
+        }
+    </style>
+</head>
+<body>
+
+<h1>Lista de Projetos</h1>
+
+<table id="projectTable">
+    <thead>
+        <tr>
+            <th>Nome do Projeto</th>
+            <th>Descrição</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Projetos serão adicionados aqui via JavaScript -->
+    </tbody>
+</table>
+
+<div class="button-container">
+    <button onclick="location.href='cadastrar_projeto.html'">Cadastrar Novo Projeto</button>
+    <button onclick="location.href='tela_principal.html'">Voltar</button>
+</div>
+
+<a href="login.html" class="logout-link">Sair do Sistema</a>
+
+<script>
+    function loadProjects() {
+        const projects = JSON.parse(localStorage.getItem('projects')) || [];
+        const tableBody = document.querySelector('#projectTable tbody');
+        tableBody.innerHTML = ''; // Limpa a tabela antes de adicionar os projetos
+
+        projects.forEach((project, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${project.nome}</td>
+                <td>${project.descricao}</td>
+                <td>
+                    <button onclick="editProject(${index})"><i class="fas fa-edit"></i> Editar</button>
+                    <button onclick="deleteProject(${index})"><i class="fas fa-trash"></i> Excluir</button>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    function deleteProject(index) {
+        const projects = JSON.parse(localStorage.getItem('projects')) || [];
+        if (confirm("Tem certeza que deseja excluir este projeto?")) {
+            projects.splice(index, 1); // Remove o projeto do array
+            localStorage.setItem('projects', JSON.stringify(projects)); // Atualiza o localStorage
+            loadProjects(); // Atualiza a tabela
+        }
+    }
+
+    function editProject(index) {
+        const projects = JSON.parse(localStorage.getItem('projects')) || [];
+        const project = projects[index];
+        // Armazenar o projeto a ser editado no localStorage para uso na página de edição
+        localStorage.setItem('projectToEdit', JSON.stringify(project));
+        localStorage.setItem('editIndex', index); // Armazenar o índice para edição
+        location.href = 'editar_projeto.html'; // Redirecionar para a página de edição
+    }
+
+    // Carrega os projetos ao iniciar a página
+    window.onload = loadProjects;
+</script>
+
+</body>
+</html>

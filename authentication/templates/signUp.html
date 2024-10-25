@@ -1,72 +1,111 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro Page</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Auth</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
+            font-family: 'Arial', sans-serif;
+            background-color: #fff; /* Fundo branco */
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #24292e;
-            color: white;
+            color: #333; /* Cor do texto em cinza escuro */
         }
-
-        .login-container {
-            background-color: #1c1e22;
-            padding: 30px;
+        .register-container {
+            background-color: rgba(255, 255, 255, 0.9); /* Fundo branco com leve transparência */
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 30px;
+            font-size: 24px;
+            letter-spacing: 1px;
+            color: #333; /* Cor do texto em cinza escuro */
+        }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        label {
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: inline-block;
+            color: #333; /* Cor do texto em cinza escuro */
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ccc; /* Borda cinza */
             border-radius: 8px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+            background-color: #fff; /* Fundo branco */
+            color: #333; /* Cor do texto em cinza escuro */
+            font-size: 14px;
+            outline: none;
         }
-
-        .btn-login {
-            background-color: #28a745;
+        input::placeholder {
+            color: rgba(51, 51, 51, 0.7); /* Placeholder em cinza */
+        }
+        button {
+            width: 100%;
+            padding: 12px 0;
+            background-color: #0072ff; /* Tom de azul */
+            color: white;
+            font-size: 16px;
             border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
-
-        .btn-login:hover {
-            background-color: #218838;
+        button:hover {
+            background-color: #0056b3; /* Tom de azul mais escuro */
+        }
+        .login-link {
+            display: block;
+            margin-top: 15px;
+            color: #0072ff; /* Cor do link */
+            font-size: 12px;
+            text-decoration: none;
+        }
+        .login-link:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
-
 <body>
-    <div class="login-container text-center">
-        <h2 class="mb-4">Cadastro</h2>
-        <form action="{% url 'cadastro' %}" method="POST">{% csrf_token %}
-            <div class="form-group">
-                <input type="text" name="username" class="form-control" placeholder="Usuario" required>
-            </div>
-            <div class="form-group">
-                <input type="password" class="form-control" name="senha" placeholder="Senha" required>
-            </div>
 
-            <div class="btn-group btn-group-toggle mb-4" data-toggle="buttons">
-                <label class="btn btn-outline-success">
-                    <input type="radio" name="role" value="Professor" id="btnradio1" autocomplete="off" checked>
-                    Professor
-                </label>
-                <label class="btn btn-outline-success">
-                    <input type="radio" name="role" value="Aluno" id="btnradio2" autocomplete="off"> Aluno
-                </label>
-            </div>
-
-            <button type="submit" value="cadastrar" class="btn btn-login btn-block">cadastrar</button>
-        </form>
-
-        <hr class="bg-white">
-        <div>
-            <p class="mt-2">Ja logado no Sistema? <a href="{% url 'login' %}" class="text-white">Entrar em sua conta</a>
-            </p>
+<div class="register-container">
+    <h2>Cadastro de Usuário</h2>
+    <form action="/login.html" method="GET" id="registerForm" onsubmit="return handleRegister()">
+        <div class="form-group">
+            <label for="name">Nome Completo</label>
+            <input type="text" id="name" name="name" placeholder="Digite seu nome" required>
         </div>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
+        <div class="form-group">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Senha</label>
+            <input type="password" id="password" name="password" placeholder="Crie uma senha" required>
+        </div>
+        <button type="submit">Cadastrar</button>
+        <a href="/login.html" class="login-link">Já tem uma conta? Faça login</a>
+    </form>
+</div>
 
+</body>
 </html>

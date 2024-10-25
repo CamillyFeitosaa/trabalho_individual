@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Tarefa - Gerente de Projetos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #fff; /* Fundo branco */
+            color: #333; /* Cor do texto em cinza escuro */
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.9); /* Fundo branco com leve transparência */
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 16px;
+            color: #333; /* Cor do texto em cinza escuro */
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc; /* Borda cinza */
+            border-radius: 8px;
+            background-color: #fff; /* Fundo branco */
+            color: #333; /* Cor do texto em cinza escuro */
+        }
+        button {
+            padding: 10px;
+            background-color: #0072ff; /* Tom de azul */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #0056b3; /* Tom de azul mais escuro */
+        }
+        .logout-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #0072ff; /* Cor do link de logout */
+            padding: 10px 15px;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+        }
+        .logout-link:hover {
+            background-color: #0056b3; /* Cor do link ao passar o mouse */
+        }
+        .back-button {
+            margin-top: 15px; /* Espaço acima do botão de voltar */
+            background-color: #0072ff; /* Cor do botão de voltar */
+        }
+    </style>
+</head>
+<body>
+
+<h1>Cadastrar Nova Tarefa</h1>
+
+<div class="form-container">
+    <form id="taskForm">
+        <label for="nome_tarefa">Nome da Tarefa:</label>
+        <input type="text" id="nome_tarefa" required>
+
+        <label for="responsavel">Nome do Responsável:</label>
+        <input type="text" id="responsavel" required>
+
+        <label for="data_entrega">Data de Entrega:</label>
+        <input type="date" id="data_entrega" required>
+
+        <label for="descricao">Descrição:</label>
+        <textarea id="descricao" rows="4" placeholder="Descrição da Tarefa" required></textarea>
+
+        <button type="submit">Cadastrar Tarefa</button>
+        <button type="button" class="back-button" onclick="location.href='tela_principal.html'">Voltar</button>
+    </form>
+</div>
+
+<a href="login.html" class="logout-link">Sair do Sistema</a>
+
+<script>
+    document.getElementById('taskForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // Impede o envio do formulário
+
+        // Obtém os valores dos campos do formulário
+        const nomeTarefa = document.getElementById('nome_tarefa').value;
+        const responsavel = document.getElementById('responsavel').value;
+        const dataEntrega = document.getElementById('data_entrega').value;
+        const descricao = document.getElementById('descricao').value; // Novo campo de descrição
+
+        // Cria um objeto da tarefa
+        const task = {
+            nome: nomeTarefa,
+            responsavel,
+            data_entrega: dataEntrega,
+            descricao // Adicionando descrição ao objeto da tarefa
+        };
+
+        // Obtém o índice do projeto atual do localStorage
+        const currentProjectIndex = localStorage.getItem('currentProjectIndex');
+        if (currentProjectIndex !== null) {
+            const projects = JSON.parse(localStorage.getItem('projects')) || [];
+            if (projects[currentProjectIndex]) {
+                // Adiciona a tarefa ao projeto correspondente
+                projects[currentProjectIndex].tarefas = projects[currentProjectIndex].tarefas || [];
+                projects[currentProjectIndex].tarefas.push(task);
+                // Salva os projetos de volta no localStorage
+                localStorage.setItem('projects', JSON.stringify(projects));
+                alert("Tarefa cadastrada com sucesso!");
+                location.href = 'tela_principal.html'; // Redireciona para a tela principal
+            } else {
+                alert("Projeto não encontrado.");
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
